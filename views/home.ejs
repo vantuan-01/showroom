@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-    <title>AB - Architects</title>
+    <title><%= generalInfo.companyNameShort %>
+        <%= generalInfo.companyNameLong %></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="w3.css">
@@ -11,7 +12,6 @@
     <div class="w3-content w3-padding" style="max-width: 1564px;">
         <%- include ('tiles/products') %>
         <%- include ('tiles/about') %>
-        <%- include ('tiles/contact') %>
     </div>
     <%- include ('tiles/footer') %>
 </body>
