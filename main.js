@@ -46,6 +46,14 @@ router.post('/edit-general-info', upload.single('featureImage'), function (reque
   controller('edit-general-info').post(request, response, webconfig, model);
 });
 
+router.get('/edit-about', function (request, response){
+  controller('edit-about').get(request, response, webconfig, model)
+})
+
+router.post('/edit-about',urlencodedParser, function (request, response){
+  controller('edit-about').post(request, response, webconfig, model)
+})
+
 app.use(webconfig.root, router);
 
 // Start web app
