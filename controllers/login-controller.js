@@ -5,7 +5,7 @@ function render(response, webconfig, username, errorMessage, model) {
         response.render('login', {
             root        : webconfig.root,
             logged      : false,
-            generalInfo :generalInfo,
+            generalInfo : generalInfo,
             username    : username,
             errorMessage: errorMessage
         })
@@ -13,8 +13,8 @@ function render(response, webconfig, username, errorMessage, model) {
 }
 
 exports.get = function (request, response, webconfig, model) {
-    if (session. logged (request)) {
-        response. redirect (webconfig.root)
+    if (session.logged (request)) {
+        response.redirect (webconfig.root)
     } else {
         render(response, webconfig, '', false, model)
     }
@@ -25,7 +25,7 @@ exports.post = function (request, response, webconfig, model) {
     model.authenticate(query.username, query.password, function (success) {
         if (success) {
             session.setLogged(response)
-            response. redirect(webconfig.root)
+            response.redirect(webconfig.root)
         } else {
             render(response, webconfig, query.username, 'Wrong login information', model)
         }

@@ -26,7 +26,7 @@ exports.create = function (datasource) {
                 }
                 callback(false)
             })
-        },
+        }, 
         getAbout : datasource.loadAbout,
 
         editAbout : function (text, callback){
@@ -41,6 +41,25 @@ exports.create = function (datasource) {
                 }
                 callback(false)
             })
-        }
+        },
+        getProducts : datasource.loadProducts,
+
+        addProduct : function (name, imageTmpPath, callback) {
+            if (name == '') {
+                callback('Product name cannot be empty')
+                return
+            }
+            if (imageTmpPath == '') {
+                callback('Product image cannot be empty')
+                return
+            }
+            datasource.addProduct (name, imageTmpPath, function (err) {
+                if (err) {
+                callback('Could not add the product')
+                return
+            }    
+            callback(false)
+            })
+        }  
     }  
 }
