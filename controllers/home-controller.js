@@ -5,7 +5,6 @@ exports.get = function(request, response, webconfig, model){
 
     model.getGeneralInfo(function (generalInfo){
         model.getProducts(function (products){
-            console.log(products)
             model.getAbout(function (about){
                 response.render('home', {
                     root        : '',

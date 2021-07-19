@@ -1,3 +1,4 @@
+const { response } = require('express')
 var fs = require('fs')
 
 function path(file) {
@@ -58,6 +59,16 @@ function parseProductId (jsonFileName) {
     return parseInt(idString)
 }
 
+function sortProducts(products){
+    for(var i = 0; i < products.length - 1; ++i)
+        for(var j = i + 1; j < products.length; ++j)
+            if(products[i].id > products[j].id){
+                var tmp = products[i]
+                products[i] = products[j]
+                products[j] = tmp
+            }
+}
+
 exports.loadProducts = function (callback) {
     var folder = getProductsFolder()
 
@@ -74,6 +85,7 @@ exports.loadProducts = function (callback) {
                 products.push(product)
                 ++count
                 if (count == total) {
+                    sortProducts(products)
                     callback(products)
                 }
             })
@@ -94,19 +106,41 @@ function getNewProductId(folder, callback) {
     })
 }
 
-exports.addProduct = function (name, imageTmpPath, callback) {
-    var folder = getProductsFolder()
+exports.addProduct = function (editProductId, name, imageTmpPath, callback) {
+    var folder = getProductsFolder();
 
-    getNewProductId(folder, function (id) {
-        var product = { name : name}
+    var saveProduct = function (id) {
+        var product = {name: name}
         fs.writeFile(folder + '/' + id + '.json', JSON.stringify(product), function (err) {
-            if (err) {
-                callback(err)
-                return
-            }
-            fs.rename(imageTmpPath, 'public/images/products/' + id + '.jpg', callback)
+                if(err){
+                    callback(err);
+                    return;
+                }
+                if(imageTmpPath != '')
+                    fs.rename(imageTmpPath, 'public/images/products/' + id + '.jpg', callback);
+                else
+                    callback(false);
         })
+    }
+    if(editProductId == 0)
+        getNewProductId(folder, saveProduct);
+    else
+        saveProduct(editProductId);
+}
+exports.loadSingleProduct = function (productId, callback){
+     var productFilePath = getProductsFolder() + '/' + productId + '.json'
+     loadProduct(productId, productFilePath, callback)
+}
+
+exports.deleteProduct = function (productId, callback){
+    fs.unlink(getProductsFolder() + '/' + productId + '.json', function (err){
+        if(err){
+            callback(err)
+            return
+        }
+        fs.unlink('/public/images/products' + productId + '.jpg', callback)
     })
 }
-    
+
+ 
     
